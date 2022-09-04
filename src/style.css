@@ -66,8 +66,9 @@ img.nav-icon {
   background-color: var(--color-input);
   border: 0;
   border-radius: 5px;
-  font-size: 25px;
+  font-size: 16px;
   padding: 5px;
+  height: 30px;
   color: white;
 }
 
@@ -111,6 +112,76 @@ a.nav:visited {
 #sidebar {
   grid-area: sidebar;
   background-color: var(--color-sidebar);
+  width: min(100%, 250px);
+}
+
+
+/* Hiding menu */
+#sidebar.hidden {
+  width: 50px;
+}
+
+#sidebar.hidden span {
+  display: none;
+}
+
+#sidebar.hidden ul {
+  margin: 16px 0;
+}
+
+#sidebar.hidden div.sidebar-headline {
+  margin: 0 0 0 10px;
+}
+
+#sidebar.hidden h3 {
+  display: none;
+}
+
+#sidebar.hidden img.sidebar-plusproject-icon {
+  display: none;
+}
+
+div.sidebar-headline {
+  display: grid;
+  align-items: center;
+  grid-template-columns: min-content auto min-content;
+  margin: 0 0 0 40px;
+}
+
+div.sidebar>h3 {
+  margin: 0;
+  cursor: pointer;
+}
+
+img.sidebar-icon {
+  height: 30px;
+  cursor: pointer;
+}
+
+#sidebar ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  margin-left: 40px;
+}
+
+li.sidebar-item {
+  list-style: none;
+  padding: 15px 10px;
+  margin: 1px 5px 1px 0;
+  display: grid;
+  grid-template-columns: min-content auto;
+  align-items: center;
+  gap: 5px;
+}
+
+li.sidebar-item:hover,
+li.sidebar-item.active,
+img.sidebar-plusproject-icon:hover {
+  cursor: pointer;
+  background-color: var(--color-input);
+  background-clip: padding-box;
+  border-radius: 5px;
 }
 
 /* Content */

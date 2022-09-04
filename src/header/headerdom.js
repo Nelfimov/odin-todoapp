@@ -1,5 +1,5 @@
-import menuIcon from './icons/view.svg'
-import githubIcon from './icons/github.svg'
+import menuIcon from '/src/icons/view.svg'
+import githubIcon from '/src/icons/github.svg'
 
 export default function getHeader() {
   getLeft();
@@ -11,31 +11,39 @@ function getLeft() {
   const left = document.querySelector('#header>div.left');
   // Adding image
   const Img = new Image();
-  Img.src = menuIcon;
-  Img.alt = 'menu';
-  Img.classList.add('nav-icon');
+  Object.assign(Img, {
+    src: menuIcon,
+    alt: 'menu',
+    className: 'nav-icon',
+    id: 'menu',
+  })
   // Adding inputs
   const inputSearch = document.createElement('input');
-  inputSearch.type = 'text';
-  inputSearch.name = 'search';
-  inputSearch.id = 'search';
-  inputSearch.classList.add('nav-search');
-  inputSearch.placeholder = 'Search';
+  Object.assign(inputSearch, {
+    type: 'text',
+    name: 'search',
+    id: 'search',
+    className: 'nav-search',
+    placeholder: 'Search',
+  })
   // Adding to parent
-  left.appendChild(Img);
-  left.appendChild(inputSearch);
+  left.append(Img, inputSearch);
 }
 
 function getMid() {
   const midDiv = document.querySelector('#header>div.mid');
   // Anchor
   const anchor = document.createElement('a');
-  anchor.href = '#';
-  anchor.classList.add('nav');
+  Object.assign(anchor, {
+    href: '#',
+    className: 'nav',
+  });
   // Span
   const name = document.createElement('span');
-  name.textContent = 'TODO APP BY NELFIMOV';
-  name.classList.add('nav');
+  Object.assign(name, {
+    textContent: 'TODO APP BY NELFIMOV',
+    className: 'nav',
+  });
   // Append to parent
   anchor.appendChild(name);
   midDiv.appendChild(anchor);
@@ -45,18 +53,21 @@ function getRight() {
   const rightDiv = document.querySelector('#header>div.right');
   // Anchor
   const anchor = document.createElement('a');
-  anchor.href = 'https://github.com/nelfimov/';
-  anchor.classList.add('nav');
+  Object.assign(anchor, {
+    href: 'https://github.com/nelfimov/',
+    className: 'nav',
+  });
   // Image
   const Img = new Image();
-  Img.src = githubIcon;
-  Img.alt = 'github';
-  Img.classList.add('nav-icon');
+  Object.assign(Img, {
+    src: githubIcon,
+    alt: 'github',
+    className: 'nav-icon',
+  });
   // Span
   const spanGithub = document.createElement('span');
   spanGithub.textContent = 'Github';
   // Append to parent
-  anchor.appendChild(Img);
-  anchor.appendChild(spanGithub);
+  anchor.append(Img, spanGithub);
   rightDiv.appendChild(anchor);
 }
