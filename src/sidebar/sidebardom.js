@@ -13,10 +13,7 @@ function getInitialSidebar() {
     ['Inbox', incomeIcon, false],
     ['Today', todayIcon, false],
     ['Ahead', aheadIcon, false],
-  ]
-  mainInitialRows.forEach((item) => sidebarModule.createItem(item[1], item[0], item[2]));
-  const projectInitialRows = [
     ['Default', projectIcon, true],
   ]
-  projectInitialRows.forEach((item) => sidebarModule.createItem(item[1], item[0], item[2]));
+  mainInitialRows.forEach((item) => sidebarModule.createItem(...item));
 }

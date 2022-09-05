@@ -48,11 +48,12 @@ const sidebarModule = (() => {
     return list;
   }
 
-  const createItem = (icon, text, isProject) => {
+  const createItem = (text, icon, isProject) => {
     const li = document.createElement('li');
     Object.assign(li, {
       className: 'sidebar sidebar-item',
     });
+    text === 'Inbox' ? li.classList.add('active') : null;
     const span = document.createElement('span');
     Object.assign(span, {
       textContent: text,
@@ -72,7 +73,6 @@ const sidebarModule = (() => {
       destinationUl = document.querySelector('#sidebar-main>ul');
     }
     li.append(image, span);
-    console.log(destinationUl);
     if (destinationUl == undefined) destinationUl = createList(isProject);
     destinationUl.appendChild(li);
   }
