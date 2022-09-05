@@ -1,14 +1,12 @@
 import './style.css';
-import getHeader from './header/headerdom';
-import getSidebar from './sidebar/sidebardom';
 import getContent, { showForm, hideForm } from './content/contentdom';
-import menu from './header/headermenu';
+import headerModule from './header/headermodule';
+import sidebarModule from './sidebar/sidebarmodule';
 
-document.onload = getHeader();
-document.onload = getSidebar();
+document.onload = headerModule.getInitial();
+document.onload = sidebarModule.getInitial();
 document.onload = getContent();
 
-document.getElementById('menu').addEventListener('click', () => menu());
 document.getElementById('new-task-title').addEventListener('focus', () => showForm());
 window.addEventListener('keyup', (e) => {
   if (e.key == 'Escape') hideForm();
