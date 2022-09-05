@@ -175,6 +175,10 @@ img.sidebar-icon {
   margin-left: 40px;
 }
 
+#sidebar ul.hidden {
+  display: none;
+}
+
 li.sidebar-item {
   list-style: none;
   padding: 15px 10px;

@@ -25,6 +25,15 @@ const sidebarModule = (() => {
         src: plusIcon,
       });
       divHeadline.append(imageExpand, headline, imagePlus);
+      let rotation = 0;
+      divHeadline.addEventListener('click', () => {
+        (() => {
+          rotation += 180;
+          if (rotation === 360) rotation = 0;
+          document.querySelector('.sidebar-expand-icon').style.transform = `rotate(${rotation}deg)`;
+        })();
+        document.querySelector('#sidebar-project>ul').classList.toggle('hidden');
+      });
       div.appendChild(divHeadline);
     } else {
       Object.assign(div, {
@@ -54,6 +63,12 @@ const sidebarModule = (() => {
       className: 'sidebar sidebar-item',
     });
     text === 'Inbox' ? li.classList.add('active') : null;
+    li.addEventListener('click', () => {
+      document.querySelectorAll('#sidebar li').forEach((item) => {
+        item.classList.remove('active');
+      });
+      li.classList.add('active');
+    })
     const span = document.createElement('span');
     Object.assign(span, {
       textContent: text,
