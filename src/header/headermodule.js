@@ -3,78 +3,71 @@ import githubIcon from '/src/icons/github.svg'
 
 const headerModule = (() => {
   const getInitial = () => {
-    leftDiv();
-    midDiv();
-    rightDiv();
+    const leftDiv = '#header>div.left';
+    const midDiv = '#header>div.mid';
+    const rightDiv = '#header>div.right';
+
+    const menuImgLeft = {
+      tag: 'img', id: 'menu', src: menuIcon, addClass: ' nav-icon',
+      type: '', text: 'menu', destination: leftDiv,
+    };
+    const searchInputLeft = {
+      tag: 'input', id: 'search', src: '', addClass: ' nav-search',
+      type: 'text', text: 'Search', destination: leftDiv,
+    };
+    const anchorMid = {
+      tag: 'a', id: null, src: '#', addClass: '',
+      type: '', text: '', destination: midDiv,
+    };
+    const spanAppNameMid = {
+      tag: 'span', id: null, src: '', addClass: '',
+      type: '', text: 'TODO APP', destination: midDiv,
+    };
+    const anchorRight = {
+      tag: 'a', id: null, src: 'https://github.com/nelfimov/', addClass: '',
+      type: '', text: '', destination: rightDiv,
+    };
+    const githubImgRight = {
+      tag: 'img', id: null, src: githubIcon, addClass: ' nav-icon',
+      type: '', text: 'github', destination: rightDiv,
+    };
+    const spanGithub = {
+      tag: 'span', id: null, src: '', addClass: '',
+      type: '', text: 'Github', destination: rightDiv,
+    };
+    const initialHeader = [
+      menuImgLeft, searchInputLeft, anchorMid, spanAppNameMid, anchorRight,
+      githubImgRight, spanGithub,
+    ];
+    initialHeader.forEach((item) => createHeaderItem(item));
   }
 
-  const leftDiv = () => {
-    const left = document.querySelector('#header>div.left');
-    // Adding image
-    const Img = new Image();
-    Object.assign(Img, {
-      src: menuIcon,
-      alt: 'menu',
-      className: 'nav-icon',
-      id: 'menu',
-    });
-    Img.addEventListener('click', toggleMenu);
-    // Adding inputs
-    const inputSearch = document.createElement('input');
-    Object.assign(inputSearch, {
-      type: 'text',
-      name: 'search',
-      id: 'search',
-      className: 'nav-search',
-      placeholder: 'Search',
-    });
-    // Adding to parent
-    left.append(Img, inputSearch);
-    return left;
-  };
-
-  const midDiv = () => {
-    const midDiv = document.querySelector('#header>div.mid');
-    // Anchor
-    const anchor = document.createElement('a');
-    Object.assign(anchor, {
-      href: '#',
-      className: 'nav',
-    });
-    // Span
-    const name = document.createElement('span');
-    Object.assign(name, {
-      textContent: 'TODO APP BY NELFIMOV',
-      className: 'nav',
-    });
-    // Append to parent
-    anchor.appendChild(name);
-    midDiv.appendChild(anchor);
-    return anchor;
-  };
-
-  const rightDiv = () => {
-    const rightDiv = document.querySelector('#header>div.right');
-    // Anchor
-    const anchor = document.createElement('a');
-    Object.assign(anchor, {
-      href: 'https://github.com/nelfimov/',
-      className: 'nav',
-    });
-    // Image
-    const Img = new Image();
-    Object.assign(Img, {
-      src: githubIcon,
-      alt: 'github',
-      className: 'nav-icon',
-    });
-    // Span
-    const spanGithub = document.createElement('span');
-    spanGithub.textContent = 'Github';
-    // Append to parent
-    anchor.append(Img, spanGithub);
-    rightDiv.appendChild(anchor);
-    return anchor;
+  const createHeaderItem = (item) => {
+    const element = document.createElement(item.tag);
+    element.className = 'nav' + item.addClass;
+    if (item.id) element.id = item.id;
+    if (item.tag === 'img') {
+      element.src = item.src;
+      element.alt = item.text;
+    };
+    if (item.tag === 'input') {
+      element.placeholder = item.text;
+      element.type = item.type;
+      element.name = item.id;
+    };
+    if (item.tag === 'a') {
+      element.href = item.src;
+    };
+    if (item.tag === 'span') {
+      element.textContent = item.text;
+    };
+    const destiny = document.querySelector(item.destination);
+    if (destiny.querySelector('a.nav')) {
+      destiny.querySelector('a.nav').appendChild(element);
+    } else {
+      document.querySelector(item.destination).appendChild(element);
+    };
+    return element;
   };
 
   const toggleMenu = () => {

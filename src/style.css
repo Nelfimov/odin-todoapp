@@ -49,7 +49,7 @@ select:focus {
   font-size: 25px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto;
+  grid-template-rows: 70px;
   grid-template-areas: 'left mid right';
   padding: 0 30px;
 }

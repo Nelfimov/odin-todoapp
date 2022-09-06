@@ -111,7 +111,7 @@ const sidebarModule = (() => {
   }
 
 
-  return { getInitial };
+  return { getInitial, createItem };
 })();
 
 export default sidebarModule;
