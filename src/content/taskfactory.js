@@ -1,8 +1,8 @@
 const tasksLibrary = [];
 
-const taskFactory = (title, description, dueDate, finished, priority, project) => {
-  const project = project || null;
-  const description = description || null;
+const taskFactory = (title, descriptionInitial, dueDate, finished, priority, projectName) => {
+  let project = projectName || null;
+  let description = descriptionInitial || null;
   return { title, description, dueDate, finished, priority, project };
 }
 

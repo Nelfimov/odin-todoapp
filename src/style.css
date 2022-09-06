@@ -207,6 +207,7 @@ img.sidebar-plusproject-icon:hover {
   align-items: flex-start;
   grid-template-columns: 1fr;
   grid-template-rows: min-content min-content 1fr;
+  gap: 20px;
 }
 
 #div-new-task {
@@ -263,4 +264,21 @@ img.sidebar-plusproject-icon:hover {
 input.new-task.empty,
 select.new-task.empty {
   color: grey;
+}
+
+#task-list div.task-item {
+  border: 1px solid black;
+  border-radius: 10px;
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: min-content 1fr min-content;
+  background-color: var(--color-slight-grey);
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+  box-shadow: 1px 1px 5px grey;
+}
+
+#task-list p {
+  margin: 0;
 }
