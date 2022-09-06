@@ -203,6 +203,10 @@ img.sidebar-plusproject-icon:hover {
 #content {
   grid-area: content;
   padding: 0 10vw;
+  display: grid;
+  align-items: flex-start;
+  grid-template-columns: 1fr;
+  grid-template-rows: min-content min-content 1fr;
 }
 
 #div-new-task {
