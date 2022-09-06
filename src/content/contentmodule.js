@@ -1,7 +1,20 @@
-import plusIcon from '/src/icons/plus.svg';
-
 const contentModule = (() => {
   const divContent = document.getElementById('content');
+
+  const getInitial = () => {
+    const initialInputs = [
+      { tag: 'input', id: 'new-task-title', type: 'text', placeholder: 'Add new task', addClass: '' },
+      { tag: 'textarea', id: 'new-task-description', type: '', placeholder: 'Description', addClass: ' for-hide hidden' },
+      { tag: 'input', id: 'new-task-date', type: 'date', placeholder: 'Due date', addClass: ' for-hide hidden empty' },
+      { tag: 'button', id: 'new-task-priority', type: '', placeholder: 'Normal priority', addClass: ' for-hide hidden' },
+      { tag: 'select', id: 'new-task-project', type: '', placeholder: 'Select project', addClass: ' for-hide hidden empty' },
+      { tag: 'button', id: 'new-task-button', type: '', placeholder: 'Create new task', addClass: ' for-hide hidden' },
+    ];
+    createNewTaskForm(initialInputs);
+    window.addEventListener('keyup', (e) => {
+      if (e.key === 'Escape') hideFullTaskForm();
+    });
+  }
 
   const createHeadline = (string) => {
     const headlineDiv = document.createElement('div');
@@ -15,40 +28,36 @@ const contentModule = (() => {
     return headlineDiv;
   }
 
-  const createNewTaskForm = () => {
+  const createNewTaskForm = (array) => {
     createHeadline('Inbox');
     const divInput = document.createElement('div');
     Object.assign(divInput, {
       id: 'div-new-task',
       className: 'task-creation',
     });
-    const inputs = [
-      ['input', 'new-task-title', 'text', 'Add new task', ''],
-      ['textarea', 'new-task-description', '', 'Description', ''],
-      ['input', 'new-task-date', 'date', 'Due date', ' empty'],
-      ['button', 'new-task-priority', '', 'Normal priority', ''],
-      ['select', 'new-task-project', '', 'Select project', ' empty'],
-      ['button', 'new-task-button', '', 'Create new task', ''],
-    ];
-    inputs.forEach((element) => {
+    array.forEach((element) => {
       let newInput;
-      newInput = document.createElement(element[0]);
+      newInput = document.createElement(element.tag);
       Object.assign(newInput, {
-        id: element[1],
-        className: 'new-task' + element[4],
-        placeholder: element[3],
+        id: element.id,
+        className: 'new-task' + element.addClass,
+        placeholder: element.placeholder,
       });
-      if (element[0] === 'input') newInput.type = element[2];
-      if (element[0] === 'button') newInput.textContent = element[3];
-      if (element[1] === 'new-task-priority') {
+      if (element.tag === 'input') newInput.type = element.type;
+      if (element.tag === 'button') newInput.textContent = element.placeholder;
+      if (element.id === 'new-task-priority') {
         newInput.addEventListener('click', () => {
           newInput.classList.toggle('top');
           newInput.classList.contains('top')
             ? newInput.textContent = 'Top priority'
             : newInput.textContent = 'Normal priority';
         })
-      }
-      inputs.indexOf(element) > 0 ? newInput.classList.add('hidden') : null;
+      };
+      if (array.indexOf(element) === 0) {
+        newInput.addEventListener('focus', () => {
+          showFullTaskForm();
+        });
+      };
       divInput.appendChild(newInput);
     });
     const emptyOption = document.createElement('option');
@@ -70,14 +79,10 @@ const contentModule = (() => {
   }
 
   const hideFullTaskForm = () => {
-    document.getElementById('new-task-description').classList.add('hidden');
-    document.getElementById('new-task-date').classList.add('hidden');
-    document.getElementById('new-task-priority').classList.add('hidden');
-    document.getElementById('new-task-project').classList.add('hidden');
-    document.getElementById('new-task-button').classList.add('hidden');
+    document.querySelectorAll('#div-new-task .for-hide').forEach((item) => item.classList.add('hidden'));
   }
 
-  return { createNewTaskForm, showFullTaskForm, hideFullTaskForm };
+  return { getInitial };
 })();
 
 export default contentModule;
