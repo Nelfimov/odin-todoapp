@@ -13,6 +13,13 @@ const taskModule = (() => {
     });
   };
 
+  const showFiltered = (library) => {
+    getOrCreateTaskListDiv().innerHTML = '';
+    library.forEach((task, index) => {
+      createTaskDiv(task, index);
+    });
+  }
+
   const getOrCreateTaskListDiv = () => {
     let div = document.getElementById('task-list');
     if (div === null) {
@@ -107,7 +114,7 @@ const taskModule = (() => {
     getInitial();
   }
 
-  return { getOrCreateTaskListDiv, createTaskDiv, getInitial };
+  return { getOrCreateTaskListDiv, createTaskDiv, getInitial, showFiltered };
 })();
 
 export default taskModule;

@@ -7,19 +7,33 @@ import { taskFactory, tasksLibrary } from './content/taskfactory';
 import { projectFactory, projectsLibrary } from './sidebar/projectfactory';
 
 const today = new Date();
-const mm = String(today.getMonth() + 1);
-const dd = String(today.getDate());
-const yyyy = String(today.getFullYear());
+let mm = today.getMonth() + 1;
+if (mm < 10) mm = '0' + mm;
+let dd = today.getDate();
+if (dd < 10) dd = '0' + dd;
+const yyyy = today.getFullYear();
 
-const taskExample = taskFactory(
-  'New task', 'Description', `${yyyy}-${mm}-${dd}`, false, false, '',
+const projectExample1 = projectFactory('Default');
+projectsLibrary.push(projectExample1);
+
+const projectExample2 = projectFactory('Another default');
+projectsLibrary.push(projectExample2);
+
+const taskExample1 = taskFactory(
+  'New task', 'Description', `${yyyy}-${mm}-${dd}`, false, false, projectExample2,
 );
-tasksLibrary.push(taskExample);
+tasksLibrary.push(taskExample1);
 
-const projectExample = projectFactory('Default');
-projectsLibrary.push(projectExample);
+const taskExample2 = taskFactory(
+  'New task', 'Description', `${yyyy}-${mm}-${dd}`, false, false, projectExample1,
+);
+tasksLibrary.push(taskExample2);
 
-document.onload = headerModule.getInitial();
-document.onload = sidebarModule.getInitial();
-document.onload = contentModule.getInitial();
+
+window.onload = headerModule.getInitial();
+window.onload = sidebarModule.getInitial();
+window.onload = contentModule.getInitial();
 document.onload = taskModule.getInitial();
+window.onload = () => {
+  document.getElementById('new-task-date').value = `${yyyy}-${mm}-${dd}`;
+};

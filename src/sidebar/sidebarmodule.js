@@ -5,6 +5,8 @@ import todayIcon from '/src/icons/calendar_today.svg';
 import aheadIcon from '/src/icons/calendar_month.svg';
 import projectIcon from '/src/icons/project.svg';
 import { projectsLibrary } from './projectfactory';
+import { tasksLibrary } from '../content/taskfactory';
+import taskModule from '../content/taskmodule';
 
 const sidebarModule = (() => {
   const sidebarDiv = document.getElementById('sidebar');
@@ -47,6 +49,12 @@ const sidebarModule = (() => {
 
     if (isProject) {
       destinationUl = document.querySelector('#sidebar-project>ul');
+      li.addEventListener('click', () => {
+        const filteredLibrary = tasksLibrary.filter((task) => {
+          return task.project === li.textContent;
+        });
+        taskModule.showFiltered(filteredLibrary);
+      });
     } else {
       li.id = `${text.toLowerCase()}`;
       destinationUl = document.querySelector('#sidebar-main>ul');
