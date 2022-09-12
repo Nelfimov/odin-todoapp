@@ -6,5 +6,4 @@ const taskFactory = (title, descriptionInitial, dueDate, finished, priority, pro
   return { title, description, dueDate, finished, priority, project };
 }
 
-export default taskFactory;
-export { tasksLibrary };
+export { taskFactory, tasksLibrary };

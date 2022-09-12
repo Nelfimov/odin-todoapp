@@ -1,3 +1,7 @@
+import { taskFactory, tasksLibrary } from "./taskfactory";
+import { projectsLibrary } from "../sidebar/projectfactory";
+import taskModule from "./taskmodule";
+
 const contentModule = (() => {
   const divContent = document.getElementById('content');
 
@@ -19,6 +23,9 @@ const contentModule = (() => {
     ];
     initialInputs.forEach((item) => createNewTaskForm(item));
     createProjectEmptyOption();
+    projectsLibrary.forEach((project) => {
+      createProjectOption(project);
+    });
     window.addEventListener('keyup', (e) => {
       if (e.key === 'Escape') hideFullTaskForm();
     });
@@ -47,8 +54,34 @@ const contentModule = (() => {
         showFullTaskForm();
       });
     };
+    if (item.id === 'new-task-button') {
+      element.addEventListener('click', createNewTask);
+    };
     divInput.appendChild(element);
     return element;
+  };
+
+  const createNewTask = () => {
+    const title = document.getElementById('new-task-title').value;
+    const description = document.getElementById('new-task-description').value;
+    const dueDate = document.getElementById('new-task-date').value;
+    let priority = document.getElementById('new-task-priority').textContent;
+    priority === 'Normal priority' ? priority = false : priority = true;
+    const project = document.getElementById('new-task-project').value;
+    if (title === '') return alert('You have to specify title');
+    if (dueDate === '') return alert('You have to specify due date');
+    let newTask = taskFactory(title, description, dueDate, false, priority, project);
+    tasksLibrary.push(newTask);
+    taskModule.getOrCreateTaskListDiv().innerHTML = '';
+    tasksLibrary.forEach((task, index) => {
+      taskModule.createTaskDiv(task, index)
+    });
+    document.getElementById('new-task-title').value = '';
+    document.getElementById('new-task-description').value = '';
+    document.getElementById('new-task-date').value = '';
+    document.getElementById('new-task-priority').textContent = '';
+    document.getElementById('new-task-project').value = '';
+    hideFullTaskForm();
   };
 
   const createProjectEmptyOption = () => {
@@ -61,6 +94,18 @@ const contentModule = (() => {
     });
     document.getElementById('new-task-project').appendChild(emptyOption);
     return emptyOption;
+  };
+
+  const createProjectOption = (project) => {
+    const option = document.createElement('option');
+    Object.assign(option, {
+      value: project.name,
+      textContent: project.name,
+      disabled: false,
+      selected: false,
+    });
+    document.getElementById('new-task-project').appendChild(option);
+    return option;
   };
 
   const createHeadline = (string) => {

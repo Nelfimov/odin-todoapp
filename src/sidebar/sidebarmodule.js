@@ -4,6 +4,7 @@ import incomeIcon from '/src/icons/inbox.svg';
 import todayIcon from '/src/icons/calendar_today.svg';
 import aheadIcon from '/src/icons/calendar_month.svg';
 import projectIcon from '/src/icons/project.svg';
+import { projectsLibrary } from './projectfactory';
 
 const sidebarModule = (() => {
   const sidebarDiv = document.getElementById('sidebar');
@@ -13,9 +14,9 @@ const sidebarModule = (() => {
       ['Inbox', incomeIcon, false, 'active'],
       ['Today', todayIcon, false, ''],
       ['Ahead', aheadIcon, false, ''],
-      ['Default', projectIcon, true, ''],
-    ]
+    ];
     mainInitialRows.forEach((item) => createItem(...item));
+    projectsLibrary.forEach((project) => createItem(project.name, projectIcon, project.isProject, ''));
   };
 
   const createItem = (text, icon, isProject, addClass) => {
@@ -53,7 +54,7 @@ const sidebarModule = (() => {
     li.append(image, span);
     if (destinationUl == undefined) destinationUl = createList(isProject);
     destinationUl.appendChild(li);
-  }
+  };
 
   const createDiv = (isProject) => {
     const div = document.createElement('div');
@@ -95,7 +96,7 @@ const sidebarModule = (() => {
     }
     sidebarDiv.appendChild(div);
     return div;
-  }
+  };
 
   const createList = (isProject) => {
     let divTarget;
@@ -108,8 +109,7 @@ const sidebarModule = (() => {
     const list = document.createElement('ul');
     divTarget.appendChild(list);
     return list;
-  }
-
+  };
 
   return { getInitial, createItem };
 })();

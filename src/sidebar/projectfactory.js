@@ -1,6 +1,8 @@
+const projectsLibrary = [];
+
 const projectFactory = (name) => {
-  isProject = true;
+  const isProject = true;
   return { name, isProject };
 }
 
-export default projectFactory;
+export { projectsLibrary, projectFactory };

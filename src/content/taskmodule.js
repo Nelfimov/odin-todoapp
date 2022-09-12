@@ -1,7 +1,17 @@
 import taskUncompleteIcon from '/src/icons/task_uncomplete.svg';
+import taskCompleteIcon from '/src/icons/task_complete.svg';
+import { tasksLibrary } from './taskfactory';
+import binIcon from '/src/icons/bin.svg';
 
 const taskModule = (() => {
   const contentDiv = document.getElementById('content');
+
+  const getInitial = () => {
+    getOrCreateTaskListDiv().innerHTML = '';
+    tasksLibrary.forEach((task, index) => {
+      createTaskDiv(task, index);
+    });
+  };
 
   const getOrCreateTaskListDiv = () => {
     let div = document.getElementById('task-list');
@@ -12,22 +22,27 @@ const taskModule = (() => {
         className: 'task task-list',
       });
       contentDiv.appendChild(div);
-      return div;
-    }
+    };
+    return div;
   };
 
   const createTaskDiv = (task, index) => {
     // TODO: project div
     const mainDiv = document.createElement('div');
-    Object.assign(mainDiv, {
-      'data-task': index,
-      className: 'task task-item',
+    mainDiv.className = 'task task-item';
+    let statusSrc = taskUncompleteIcon;
+    if (task.finished === true) {
+      mainDiv.classList.add('completed');
+      statusSrc = taskCompleteIcon;
+    };
+
+    const statusIcon = new Image();
+    Object.assign(statusIcon, {
+      className: 'task task-icon task-complete',
+      src: statusSrc,
     });
-    const completeIcon = new Image();
-    Object.assign(completeIcon, {
-      className: 'task task-icon',
-      src: taskUncompleteIcon,
-    });
+    statusIcon.setAttribute('data-task', index);
+    statusIcon.addEventListener('click', () => finishTask(index));
 
     const subDiv = document.createElement('div');
     Object.assign(subDiv, {
@@ -44,6 +59,14 @@ const taskModule = (() => {
       className: 'task task-content-description',
     });
     subDiv.append(titleP, descriptionP);
+    if (task.project !== null) {
+      const projectP = document.createElement('p');
+      Object.assign(projectP, {
+        textContent: task.project,
+        className: 'task task-content-project',
+      });
+      subDiv.append(projectP);
+    };
 
     const timeDiv = document.createElement('div');
     Object.assign(timeDiv, {
@@ -55,11 +78,36 @@ const taskModule = (() => {
       textContent: task.dueDate,
     });
     timeDiv.appendChild(timeP);
-    mainDiv.append(completeIcon, subDiv, timeDiv);
+
+    const deleteIcon = new Image();
+    Object.assign(deleteIcon, {
+      className: 'task task-icon task-delete',
+      src: binIcon,
+    });
+    deleteIcon.setAttribute('data-task', index);
+    deleteIcon.addEventListener('click', () => deleteTask(index));
+
+    mainDiv.append(statusIcon, subDiv, timeDiv, deleteIcon);
     getOrCreateTaskListDiv().prepend(mainDiv);
     return mainDiv;
+  };
+
+  const finishTask = (index) => {
+    let status = tasksLibrary[index].finished;
+    status === true ? status = false : status = true;
+    tasksLibrary[index].finished = status;
+    console.log(tasksLibrary);
+    getInitial();
+    return tasksLibrary[index];
+  };
+
+  const deleteTask = (index) => {
+    tasksLibrary.splice(index, 1);
+    console.log(tasksLibrary);
+    getInitial();
   }
-  return { getOrCreateTaskListDiv, createTaskDiv };
+
+  return { getOrCreateTaskListDiv, createTaskDiv, getInitial };
 })();
 
 export default taskModule;
