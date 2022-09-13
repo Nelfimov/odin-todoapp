@@ -13,7 +13,7 @@ const sidebarModule = (() => {
 
   const getInitial = () => {
     const mainInitialRows = [
-      ['Inbox', incomeIcon, false, 'active'],
+      ['All', incomeIcon, false, 'active'],
       ['Today', todayIcon, false, ''],
       ['Ahead', aheadIcon, false, ''],
     ];
@@ -33,7 +33,6 @@ const sidebarModule = (() => {
       li.classList.add('active');
       document.querySelector('#div-content-headline>h2')
         .textContent = text;
-      // TODO: filter based on category
     });
     const span = document.createElement('span');
     Object.assign(span, {
@@ -46,6 +45,30 @@ const sidebarModule = (() => {
       src: icon,
     });
     let destinationUl;
+
+    if (text === 'All') {
+      li.addEventListener('click', () => {
+        taskModule.getInitial();
+      });
+    };
+    if (text === 'Today') {
+      li.addEventListener('click', () => {
+        const filteredLibrary = tasksLibrary.filter((task) => {
+          return task.dueDate.toDateString() === new Date().toDateString();
+        });
+        taskModule.showFiltered(filteredLibrary);
+        return filteredLibrary;
+      });
+    };
+    if (text === 'Ahead') {
+      li.addEventListener('click', () => {
+        const filteredLibrary = tasksLibrary.filter((task) => {
+          return task.dueDate.toDateString() !== new Date().toDateString();
+        });
+        taskModule.showFiltered(filteredLibrary);
+        return filteredLibrary;
+      });
+    }
 
     if (isProject) {
       destinationUl = document.querySelector('#sidebar-project>ul');

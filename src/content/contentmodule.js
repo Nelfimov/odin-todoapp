@@ -63,14 +63,15 @@ const contentModule = (() => {
 
   const createNewTask = () => {
     const title = document.getElementById('new-task-title').value;
+    if (title === '') return alert('You have to specify title');
     const description = document.getElementById('new-task-description').value;
-    const dueDate = document.getElementById('new-task-date').value;
+    const inputDate = new Date(document.getElementById('new-task-date').value);
+    if (inputDate === '') return alert('You have to specify due date');
+    if (inputDate < new Date(new Date().toDateString())) return alert('Date cannot be in the past');
     let priority = document.getElementById('new-task-priority').textContent;
     priority === 'Normal priority' ? priority = false : priority = true;
     const project = document.getElementById('new-task-project').value;
-    if (title === '') return alert('You have to specify title');
-    if (dueDate === '') return alert('You have to specify due date');
-    let newTask = taskFactory(title, description, dueDate, false, priority, project);
+    let newTask = taskFactory(title, description, inputDate, false, priority, project);
     tasksLibrary.push(newTask);
     taskModule.getOrCreateTaskListDiv().innerHTML = '';
     tasksLibrary.forEach((task, index) => {
@@ -78,7 +79,6 @@ const contentModule = (() => {
     });
     document.getElementById('new-task-title').value = '';
     document.getElementById('new-task-description').value = '';
-    document.getElementById('new-task-date').value = '';
     document.getElementById('new-task-priority').textContent = '';
     document.getElementById('new-task-project').value = '';
     hideFullTaskForm();

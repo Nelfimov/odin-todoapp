@@ -20,20 +20,19 @@ const projectExample2 = projectFactory('Another default');
 projectsLibrary.push(projectExample2);
 
 const taskExample1 = taskFactory(
-  'New task', 'Description', `${yyyy}-${mm}-${dd}`, false, false, projectExample2,
+  'New task', 'Description', new Date(), false, false, projectExample2,
 );
 tasksLibrary.push(taskExample1);
 
 const taskExample2 = taskFactory(
-  'New task', 'Description', `${yyyy}-${mm}-${dd}`, false, false, projectExample1,
+  'New task', 'Description', new Date(), false, false, projectExample1,
 );
 tasksLibrary.push(taskExample2);
 
-
-window.onload = headerModule.getInitial();
-window.onload = sidebarModule.getInitial();
-window.onload = contentModule.getInitial();
-document.onload = taskModule.getInitial();
 window.onload = () => {
+  headerModule.getInitial();
+  sidebarModule.getInitial();
+  contentModule.getInitial();
+  taskModule.getInitial();
   document.getElementById('new-task-date').value = `${yyyy}-${mm}-${dd}`;
 };

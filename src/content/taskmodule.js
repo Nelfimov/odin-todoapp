@@ -34,7 +34,6 @@ const taskModule = (() => {
   };
 
   const createTaskDiv = (task, index) => {
-    // TODO: project div
     const mainDiv = document.createElement('div');
     mainDiv.className = 'task task-item';
     let statusSrc = taskUncompleteIcon;
@@ -74,18 +73,29 @@ const taskModule = (() => {
       });
       subDiv.append(projectP);
     };
-
+    // Due time
     const timeDiv = document.createElement('div');
     Object.assign(timeDiv, {
       className: 'task task-content-time',
     });
     const timeP = document.createElement('p');
+    let day = task.dueDate.getDate();
+    if (day < 10) day = '0' + day;
+    let month = task.dueDate.getMonth() + 1;
+    if (month < 10) month = '0' + month;
+    const year = task.dueDate.getFullYear();
+    let taskDateString;
+    if (year > new Date(new Date().getFullYear())) {
+      taskDateString = `${day}/${month}/${year}`;
+    } else {
+      taskDateString = `${day}/${month}`;
+    }
     Object.assign(timeP, {
       className: 'task task-content-time',
-      textContent: task.dueDate,
+      textContent: taskDateString,
     });
     timeDiv.appendChild(timeP);
-
+    // Delete task icon
     const deleteIcon = new Image();
     Object.assign(deleteIcon, {
       className: 'task task-icon task-delete',
