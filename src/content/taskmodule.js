@@ -36,6 +36,7 @@ const taskModule = (() => {
   const createTaskDiv = (task, index) => {
     const mainDiv = document.createElement('div');
     mainDiv.className = 'task task-item';
+    if (task.priority === true) mainDiv.classList.add('priority');
     let statusSrc = taskUncompleteIcon;
     if (task.finished === true) {
       mainDiv.classList.add('completed');

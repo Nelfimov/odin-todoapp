@@ -79,7 +79,6 @@ const contentModule = (() => {
     });
     document.getElementById('new-task-title').value = '';
     document.getElementById('new-task-description').value = '';
-    document.getElementById('new-task-priority').textContent = '';
     document.getElementById('new-task-project').value = '';
     hideFullTaskForm();
   };

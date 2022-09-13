@@ -46,6 +46,11 @@ const headerModule = (() => {
     const element = document.createElement(item.tag);
     element.className = 'nav' + item.addClass;
     if (item.id) element.id = item.id;
+    if (item.id === 'menu') {
+      element.addEventListener('click', () => {
+        toggleMenu();
+      })
+    };
     if (item.tag === 'img') {
       element.src = item.src;
       element.alt = item.text;

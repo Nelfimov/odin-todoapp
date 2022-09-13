@@ -52,6 +52,9 @@ select:focus {
   grid-template-rows: 70px;
   grid-template-areas: 'left mid right';
   padding: 0 30px;
+  position: fixed;
+  right: 0;
+  left: 0;
 }
 
 #header>div.left {
@@ -123,6 +126,9 @@ a.nav:visited {
   grid-area: sidebar;
   background-color: var(--color-sidebar);
   width: min(100%, 250px);
+  position: fixed;
+  bottom: 0;
+  top: 70px;
 }
 
 
@@ -214,7 +220,13 @@ img.sidebar-plusproject-icon:hover {
   display: grid;
   align-items: center;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 10px
+  gap: 10px;
+  position: sticky;
+  top: 70px;
+  padding: 10px 0;
+  background-color: white;
+  background-clip: padding-box;
+  box-shadow: 0 10px 10px -11px grey;
 }
 
 #new-task-title {
@@ -271,9 +283,9 @@ select.new-task.empty {
   gap: 10px;
   align-items: start;
   grid-auto-flow: row;
-  grid-auto-columns: 1fr;
-  grid-auto-rows: minmax(68px, min-content);
-  overflow-y: auto;
+  grid-auto-columns: 0.95fr;
+  grid-auto-rows: max-content;
+  justify-content: center;
   overflow-wrap: break-word;
   height: 55vh;
 }
@@ -325,4 +337,13 @@ select.new-task.empty {
 #task-list div.task-item.completed {
   text-decoration: line-through;
   filter: opacity(40%);
+}
+
+#task-list div.task-item.priority {
+  background-color: rgb(250, 206, 123);
+}
+
+#task-list .task-content-title {
+  font-weight: bold;
+  font-size: 1.1rem;
 }
