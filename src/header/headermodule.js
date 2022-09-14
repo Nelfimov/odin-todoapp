@@ -1,5 +1,7 @@
-import menuIcon from '/src/icons/view.svg'
-import githubIcon from '/src/icons/github.svg'
+import menuIcon from '/src/icons/view.svg';
+import githubIcon from '/src/icons/github.svg';
+import taskModule from '../content/taskmodule';
+import { tasksLibrary } from '../content/taskfactory';
 
 const headerModule = (() => {
   const getInitial = () => {
@@ -51,6 +53,11 @@ const headerModule = (() => {
         toggleMenu();
       })
     };
+    if (item.id === 'search') {
+      element.addEventListener('input', (e) => {
+        searchTask();
+      })
+    };
     if (item.tag === 'img') {
       element.src = item.src;
       element.alt = item.text;
@@ -79,6 +86,23 @@ const headerModule = (() => {
     const sidebar = document.getElementById('sidebar');
     sidebar.classList.toggle('hidden');
   }
+
+  const searchTask = () => {
+    const value = document.getElementById('search').value;
+    const regex = new RegExp(value, 'gi');
+    const filterTitle = tasksLibrary.filter((task) => {
+      return regex.test(task.title);
+    });
+    const filterDescription = tasksLibrary.filter((task) => {
+      return regex.test(task.description);
+    });
+    if (value !== '') {
+      const filteredLibrary = filterTitle.concat(filterDescription);
+      taskModule.showFiltered(filteredLibrary);
+    } else {
+      taskModule.getInitial();
+    };
+  };
 
   return { getInitial };
 })();

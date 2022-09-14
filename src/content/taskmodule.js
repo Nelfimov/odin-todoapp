@@ -3,6 +3,7 @@ import taskCompleteIcon from '/src/icons/task_complete.svg';
 import binIcon from '/src/icons/bin.svg';
 import { LOCAL_STORAGE_TASK_KEY, tasksLibrary, taskFactory } from './taskfactory';
 import contentModule from './contentmodule';
+import { projectsLibrary } from '../sidebar/projectfactory';
 
 const taskModule = (() => {
   const contentDiv = document.getElementById('content');
@@ -44,9 +45,11 @@ const taskModule = (() => {
     inputDate = new Date(inputDate.toDateString());
     let priority = document.getElementById('new-task-priority').textContent;
     priority === 'Normal priority' ? priority = false : priority = true;
-    let project = document.getElementById('new-task-project').value;
-    if (project === 'No project' || project === 'Select project') project = null;
-    let newTask = taskFactory(title, description, inputDate, false, priority, project);
+    const projectSelect = document.getElementById('new-task-project').value;
+    const findProject = projectsLibrary.filter((project) => {
+      return project.name === projectSelect;
+    });
+    const newTask = taskFactory(title, description, inputDate, false, priority, findProject[0]);
     tasksLibrary.push(newTask);
     localStorage.setItem(LOCAL_STORAGE_TASK_KEY, JSON.stringify(tasksLibrary));
     taskModule.getOrCreateTaskListDiv().innerHTML = '';

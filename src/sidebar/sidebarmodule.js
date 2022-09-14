@@ -56,7 +56,7 @@ const sidebarModule = (() => {
     if (text === 'Today') {
       li.addEventListener('click', () => {
         const filteredLibrary = tasksLibrary.filter((task) => {
-          return task.dueDate.toDateString() === new Date().toDateString();
+          return new Date(task.dueDate).toDateString() === new Date(new Date().toDateString()).toDateString();
         });
         taskModule.showFiltered(filteredLibrary);
         return filteredLibrary;
@@ -65,7 +65,7 @@ const sidebarModule = (() => {
     if (text === 'Ahead') {
       li.addEventListener('click', () => {
         const filteredLibrary = tasksLibrary.filter((task) => {
-          return task.dueDate.toDateString() !== new Date().toDateString();
+          return new Date(task.dueDate).toDateString() !== new Date(new Date().toDateString()).toDateString();
         });
         taskModule.showFiltered(filteredLibrary);
         return filteredLibrary;
@@ -186,8 +186,14 @@ const sidebarModule = (() => {
   const deleteProject = (index) => {
     projectsLibrary.splice(index, 1);
     localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY, JSON.stringify(projectsLibrary));
-    document.querySelector('#sidebar-project>ul').innerHTML = '';
-    projectsLibrary.forEach((project, projectIndex) => DOMcreateItem(project.name, projectIcon, project.isProject, '', projectIndex));
+    const ul = document.querySelector('#sidebar-project>ul');
+    if (ul !== null) ul.innerHTML = '';
+    document.getElementById('new-task-project').innerHTML = '';
+    contentModule.DOMcreateProjectEmptyOption();
+    projectsLibrary.forEach((project, projectIndex) => {
+      DOMcreateItem(project.name, projectIcon, project.isProject, '', projectIndex);
+      contentModule.DOMcreateProjectOption;
+    });
   };
 
   return { getInitial, createItem: DOMcreateItem };
