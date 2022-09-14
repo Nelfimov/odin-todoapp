@@ -1,11 +1,12 @@
 import { projectsLibrary } from "../sidebar/projectfactory";
+import { tasksLibrary } from "./taskfactory";
 import taskModule from "./taskmodule";
 
 const contentModule = (() => {
   const divContent = document.getElementById('content');
 
   const getInitial = () => {
-    createHeadline('Inbox');
+    DOMcreateHeadline('Inbox');
     const divInput = document.createElement('div');
     Object.assign(divInput, {
       id: 'div-new-task',
@@ -21,12 +22,12 @@ const contentModule = (() => {
       { tag: 'button', id: 'new-task-button', type: '', text: 'Create new task', addClass: ' for-hide hidden' },
     ];
     initialInputs.forEach((item) => createNewTaskForm(item));
-    createProjectEmptyOption();
+    DOMcreateProjectEmptyOption();
     projectsLibrary.forEach((project) => {
-      createProjectOption(project);
+      DOMcreateProjectOption(project);
     });
     window.addEventListener('keyup', (e) => {
-      if (e.key === 'Escape') hideFullTaskForm();
+      if (e.key === 'Escape') DOMhideFullTaskForm();
     });
   };
 
@@ -50,7 +51,7 @@ const contentModule = (() => {
     };
     if (item.id === 'new-task-title') {
       element.addEventListener('focus', () => {
-        showFullTaskForm();
+        DOMshowFullTaskForm();
       });
     };
     if (item.id === 'new-task-button') {
@@ -69,19 +70,21 @@ const contentModule = (() => {
     return element;
   };
 
-  const createProjectEmptyOption = () => {
+  const DOMcreateProjectEmptyOption = () => {
     const emptyOption = document.createElement('option');
     Object.assign(emptyOption, {
       value: '',
       textContent: 'Select project',
-      disabled: true,
+      disabled: false,
       selected: true,
     });
+    if (projectsLibrary.length > 0) emptyOption.textContent = 'No project';
     document.getElementById('new-task-project').appendChild(emptyOption);
     return emptyOption;
   };
 
-  const createProjectOption = (project) => {
+  const DOMcreateProjectOption = (project) => {
+    const select = document.getElementById('new-task-project');
     const option = document.createElement('option');
     Object.assign(option, {
       value: project.name,
@@ -89,11 +92,11 @@ const contentModule = (() => {
       disabled: false,
       selected: false,
     });
-    document.getElementById('new-task-project').appendChild(option);
+    select.appendChild(option);
     return option;
   };
 
-  const createHeadline = (string) => {
+  const DOMcreateHeadline = (string) => {
     const headlineDiv = document.createElement('div');
     Object.assign(headlineDiv, {
       id: 'div-content-headline',
@@ -105,17 +108,17 @@ const contentModule = (() => {
     return headlineDiv;
   };
 
-  const showFullTaskForm = () => {
+  const DOMshowFullTaskForm = () => {
     document.querySelectorAll('#div-new-task .hidden').forEach((node) => {
       node.classList.remove('hidden');
     })
   };
 
-  const hideFullTaskForm = () => {
+  const DOMhideFullTaskForm = () => {
     document.querySelectorAll('#div-new-task .for-hide').forEach((item) => item.classList.add('hidden'));
   };
 
-  return { getInitial, hideFullTaskForm, showFullTaskForm };
+  return { getInitial, hideFullTaskForm: DOMhideFullTaskForm, showFullTaskForm: DOMshowFullTaskForm, DOMcreateProjectOption, DOMcreateProjectEmptyOption };
 })();
 
 export default contentModule;

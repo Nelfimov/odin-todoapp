@@ -8,22 +8,23 @@ import projectIcon from '/src/icons/project.svg';
 import { projectsLibrary, LOCAL_STORAGE_PROJECT_KEY, projectFactory } from './projectfactory';
 import { tasksLibrary } from '../content/taskfactory';
 import taskModule from '../content/taskmodule';
+import contentModule from '../content/contentmodule';
 
 const sidebarModule = (() => {
   const sidebarDiv = document.getElementById('sidebar');
 
   const getInitial = () => {
-    createHeaders();
+    DOMcreateHeaders();
     const mainInitialRows = [
       ['All', incomeIcon, false, 'active'],
       ['Today', todayIcon, false, ''],
       ['Ahead', aheadIcon, false, ''],
     ];
-    mainInitialRows.forEach((item) => createItem(...item));
-    projectsLibrary.forEach((project, index) => createItem(project.name, projectIcon, project.isProject, '', index));
+    mainInitialRows.forEach((item) => DOMcreateItem(...item));
+    projectsLibrary.forEach((project, index) => DOMcreateItem(project.name, projectIcon, project.isProject, '', index));
   };
 
-  const createItem = (text, icon, isProject, addClass, projectIndex) => {
+  const DOMcreateItem = (text, icon, isProject, addClass, projectIndex) => {
     const li = document.createElement('li');
     Object.assign(li, {
       className: 'sidebar sidebar-item ' + addClass,
@@ -46,7 +47,6 @@ const sidebarModule = (() => {
       className: 'sidebar sidebar-icon',
       src: icon,
     });
-    let destinationUl;
 
     if (text === 'All') {
       li.addEventListener('click', () => {
@@ -71,9 +71,11 @@ const sidebarModule = (() => {
         return filteredLibrary;
       });
     }
+    li.append(image, span);
 
+    let ul;
     if (isProject) {
-      destinationUl = document.querySelector('#sidebar-project>ul');
+      ul = document.querySelector('#sidebar-project>ul');
       li.addEventListener('click', () => {
         const filteredLibrary = tasksLibrary.filter((task) => {
           return task.project === li.textContent;
@@ -82,9 +84,8 @@ const sidebarModule = (() => {
       });
     } else {
       li.id = `${text.toLowerCase()}`;
-      destinationUl = document.querySelector('#sidebar-main>ul');
+      ul = document.querySelector('#sidebar-main>ul');
     };
-    li.append(image, span);
     if (isProject) {
       const deleteImage = new Image();
       Object.assign(deleteImage, {
@@ -95,19 +96,19 @@ const sidebarModule = (() => {
       deleteImage.addEventListener('click', () => deleteProject(projectIndex));
       li.append(deleteImage);
     };
-    if (destinationUl == undefined) destinationUl = createList(isProject);
-    destinationUl.appendChild(li);
+    ul.appendChild(li);
   };
 
-  const createHeaders = () => {
+  const DOMcreateHeaders = () => {
     let sidebarDiv = document.getElementById('sidebar-main');
-    if (sidebarDiv === null) createDiv(false);
+    if (sidebarDiv === null) DOMcreateDiv(false);
     let projectDiv = document.getElementById('sidebar-project');
-    if (projectDiv === null) createDiv(true);
+    if (projectDiv === null) DOMcreateDiv(true);
   };
 
-  const createDiv = (isProject) => {
+  const DOMcreateDiv = (isProject) => {
     const div = document.createElement('div');
+
     if (isProject) {
       Object.assign(div, {
         id: 'sidebar-project',
@@ -135,7 +136,7 @@ const sidebarModule = (() => {
       });
       newProjectInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-          createNewProject(newProjectInput.value);
+          createProject(newProjectInput.value);
           newProjectInput.value = '';
           newProjectInput.classList.toggle('hidden');
         };
@@ -162,29 +163,23 @@ const sidebarModule = (() => {
         id: 'sidebar-main',
       })
     }
+    div.appendChild(document.createElement('ul'));
     sidebarDiv.appendChild(div);
     return div;
   };
 
-  const createList = (isProject) => {
-    let divTarget;
-    if (isProject) {
-      divTarget = document.getElementById('sidebar-project');
-    } else {
-      divTarget = document.getElementById('sidebar-main');
-    }
-    const list = document.createElement('ul');
-    divTarget.appendChild(list);
-    return list;
-  };
-
-  const createNewProject = (value) => {
+  const createProject = (value) => {
     let newProject = projectFactory(value);
     projectsLibrary.push(newProject);
     localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY, JSON.stringify(projectsLibrary));
     const ul = document.querySelector('#sidebar-project>ul');
     if (ul !== null) ul.innerHTML = '';
-    projectsLibrary.forEach((project, index) => createItem(project.name, projectIcon, project.isProject, '', index));
+    document.getElementById('new-task-project').innerHTML = '';
+    contentModule.DOMcreateProjectEmptyOption();
+    projectsLibrary.forEach((project, index) => {
+      DOMcreateItem(project.name, projectIcon, project.isProject, '', index);
+      contentModule.DOMcreateProjectOption(project);
+    });
     return newProject;
   };
 
@@ -192,10 +187,10 @@ const sidebarModule = (() => {
     projectsLibrary.splice(index, 1);
     localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY, JSON.stringify(projectsLibrary));
     document.querySelector('#sidebar-project>ul').innerHTML = '';
-    projectsLibrary.forEach((project, projectIndex) => createItem(project.name, projectIcon, project.isProject, '', projectIndex));
+    projectsLibrary.forEach((project, projectIndex) => DOMcreateItem(project.name, projectIcon, project.isProject, '', projectIndex));
   };
 
-  return { getInitial, createItem };
+  return { getInitial, createItem: DOMcreateItem };
 })();
 
 export default sidebarModule;

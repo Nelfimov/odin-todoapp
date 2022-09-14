@@ -8,20 +8,20 @@ const taskModule = (() => {
   const contentDiv = document.getElementById('content');
 
   const getInitial = () => {
-    getOrCreateTaskListDiv().innerHTML = '';
+    DOMgetOrCreateTaskListDiv().innerHTML = '';
     tasksLibrary.forEach((task, index) => {
-      createTaskDiv(task, index);
+      DOMcreateTaskDiv(task, index);
     });
   };
 
   const showFiltered = (library) => {
-    getOrCreateTaskListDiv().innerHTML = '';
+    DOMgetOrCreateTaskListDiv().innerHTML = '';
     library.forEach((task, index) => {
-      createTaskDiv(task, index);
+      DOMcreateTaskDiv(task, index);
     });
   }
 
-  const getOrCreateTaskListDiv = () => {
+  const DOMgetOrCreateTaskListDiv = () => {
     let div = document.getElementById('task-list');
     if (div === null) {
       div = document.createElement('div');
@@ -38,15 +38,16 @@ const taskModule = (() => {
     const title = document.getElementById('new-task-title').value;
     if (title === '') return alert('You have to specify title');
     const description = document.getElementById('new-task-description').value;
-    const inputDate = new Date(document.getElementById('new-task-date').value);
+    let inputDate = new Date(document.getElementById('new-task-date').value);
     if (inputDate === '') return alert('You have to specify due date');
     if (inputDate < new Date(new Date().toDateString())) return alert('Date cannot be in the past');
+    inputDate = new Date(inputDate.toDateString());
     let priority = document.getElementById('new-task-priority').textContent;
     priority === 'Normal priority' ? priority = false : priority = true;
-    const project = document.getElementById('new-task-project').value;
+    let project = document.getElementById('new-task-project').value;
+    if (project === 'No project' || project === 'Select project') project = null;
     let newTask = taskFactory(title, description, inputDate, false, priority, project);
     tasksLibrary.push(newTask);
-    console.log(tasksLibrary);
     localStorage.setItem(LOCAL_STORAGE_TASK_KEY, JSON.stringify(tasksLibrary));
     taskModule.getOrCreateTaskListDiv().innerHTML = '';
     tasksLibrary.forEach((task, index) => {
@@ -59,7 +60,7 @@ const taskModule = (() => {
   };
 
 
-  const createTaskDiv = (task, index) => {
+  const DOMcreateTaskDiv = (task, index) => {
     const mainDiv = document.createElement('div');
     mainDiv.className = 'task task-item';
     if (task.priority === true) mainDiv.classList.add('priority');
@@ -122,6 +123,9 @@ const taskModule = (() => {
       className: 'task task-content-time',
       textContent: taskDateString,
     });
+    if (taskDate <= new Date(new Date().toDateString())) {
+      timeP.classList.add('overdue');
+    };
     timeDiv.appendChild(timeP);
     // Delete task icon
     const deleteIcon = new Image();
@@ -133,7 +137,7 @@ const taskModule = (() => {
     deleteIcon.addEventListener('click', () => deleteTask(index));
 
     mainDiv.append(statusIcon, subDiv, timeDiv, deleteIcon);
-    getOrCreateTaskListDiv().prepend(mainDiv);
+    DOMgetOrCreateTaskListDiv().prepend(mainDiv);
     return mainDiv;
   };
 
@@ -152,7 +156,7 @@ const taskModule = (() => {
     getInitial();
   }
 
-  return { getOrCreateTaskListDiv, createNewTask, createTaskDiv, getInitial, showFiltered };
+  return { getOrCreateTaskListDiv: DOMgetOrCreateTaskListDiv, createNewTask, createTaskDiv: DOMcreateTaskDiv, getInitial, showFiltered };
 })();
 
 export default taskModule;

@@ -360,3 +360,7 @@ select.new-task.empty {
   font-weight: bold;
   font-size: 1.1rem;
 }
+
+#task-list div.task-item p.task-content-time.overdue {
+  color: red;
+}
