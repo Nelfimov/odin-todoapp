@@ -12,6 +12,7 @@ module.exports = {
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
+    clean: true,
   },
   plugins: [
     new MiniCssExtractPlugin(),
@@ -24,7 +25,7 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: ['style-loader',
+        use: [MiniCssExtractPlugin.loader,
           'css-loader'],
       },
       {
