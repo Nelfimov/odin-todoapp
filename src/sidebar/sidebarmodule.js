@@ -4,7 +4,7 @@ import incomeIcon from '/src/icons/inbox.svg';
 import todayIcon from '/src/icons/calendar_today.svg';
 import aheadIcon from '/src/icons/calendar_month.svg';
 import projectIcon from '/src/icons/project.svg';
-import { projectsLibrary } from './projectfactory';
+import { projectsLibrary, LOCAL_STORAGE_PROJECT_KEY, projectFactory } from './projectfactory';
 import { tasksLibrary } from '../content/taskfactory';
 import taskModule from '../content/taskmodule';
 
@@ -12,6 +12,7 @@ const sidebarModule = (() => {
   const sidebarDiv = document.getElementById('sidebar');
 
   const getInitial = () => {
+    createHeaders();
     const mainInitialRows = [
       ['All', incomeIcon, false, 'active'],
       ['Today', todayIcon, false, ''],
@@ -87,6 +88,13 @@ const sidebarModule = (() => {
     destinationUl.appendChild(li);
   };
 
+  const createHeaders = () => {
+    let sidebarDiv = document.getElementById('sidebar-main');
+    if (sidebarDiv === null) createDiv(false);
+    let projectDiv = document.getElementById('sidebar-project');
+    if (projectDiv === null) createDiv(true);
+  };
+
   const createDiv = (isProject) => {
     const div = document.createElement('div');
     if (isProject) {
@@ -107,9 +115,23 @@ const sidebarModule = (() => {
         className: 'sidebar sidebar-icon sidebar-plusproject-icon',
         src: plusIcon,
       });
-      divHeadline.append(imageExpand, headline, imagePlus);
+      const newProjectInput = document.createElement('input');
+      Object.assign(newProjectInput, {
+        id: 'new-project-input',
+        className: 'nav-search hidden',
+        type: 'text',
+      });
+      newProjectInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          createNewProject(newProjectInput.value);
+          newProjectInput.value = '';
+          newProjectInput.classList.toggle('hidden');
+        };
+        if (e.key === 'Escape') newProjectInput.classList.toggle('hidden');
+      });
+      divHeadline.append(imageExpand, headline, imagePlus, newProjectInput);
       let rotation = 0;
-      divHeadline.addEventListener('click', () => {
+      imageExpand.addEventListener('click', () => {
         (() => {
           rotation += 180;
           if (rotation === 360) rotation = 0;
@@ -118,6 +140,9 @@ const sidebarModule = (() => {
         })();
         document.querySelector('#sidebar-project>ul')
           .classList.toggle('hidden');
+      });
+      imagePlus.addEventListener('click', () => {
+        newProjectInput.classList.toggle('hidden');
       });
       div.appendChild(divHeadline);
     } else {
@@ -136,10 +161,18 @@ const sidebarModule = (() => {
     } else {
       divTarget = document.getElementById('sidebar-main');
     }
-    if (divTarget == null) divTarget = createDiv(isProject);
     const list = document.createElement('ul');
     divTarget.appendChild(list);
     return list;
+  };
+
+  const createNewProject = (value) => {
+    let newProject = projectFactory(value);
+    projectsLibrary.push(newProject);
+    localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY, JSON.stringify(projectsLibrary));
+    document.querySelector('#sidebar-project>ul').innerHTML = '';
+    projectsLibrary.forEach((project) => createItem(project.name, projectIcon, project.isProject, ''));
+    return newProject;
   };
 
   return { getInitial, createItem };

@@ -79,7 +79,8 @@ img.nav-icon {
   height: 65px;
 }
 
-#search {
+#search,
+#new-project-input {
   background-color: var(--color-input);
   border: 0;
   border-radius: 5px;
@@ -87,6 +88,16 @@ img.nav-icon {
   padding: 5px;
   height: 30px;
   color: white;
+}
+
+#new-project-input {
+  color: black;
+  grid-column: 1 / 4;
+  margin-top: 2px;
+}
+
+#new-project-input.hidden {
+  display: none;
 }
 
 #search::placeholder {
@@ -160,8 +171,8 @@ a.nav:visited {
 div.sidebar-headline {
   display: grid;
   align-items: center;
-  grid-template-columns: min-content auto min-content;
-  margin: 0 0 0 40px;
+  grid-template-columns: 30px auto 30px;
+  margin: 0 5px 0 40px;
 }
 
 div.sidebar>h3 {

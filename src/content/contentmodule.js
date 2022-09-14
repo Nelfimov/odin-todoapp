@@ -1,4 +1,3 @@
-import { taskFactory, tasksLibrary } from "./taskfactory";
 import { projectsLibrary } from "../sidebar/projectfactory";
 import taskModule from "./taskmodule";
 
@@ -55,32 +54,19 @@ const contentModule = (() => {
       });
     };
     if (item.id === 'new-task-button') {
-      element.addEventListener('click', createNewTask);
+      element.addEventListener('click', () => taskModule.createNewTask());
+    };
+    if (item.type === 'date') {
+      const today = new Date();
+      let mm = today.getMonth() + 1;
+      if (mm < 10) mm = '0' + mm;
+      let dd = today.getDate();
+      if (dd < 10) dd = '0' + dd;
+      const yyyy = today.getFullYear();
+      element.value = `${yyyy}-${mm}-${dd}`;
     };
     divInput.appendChild(element);
     return element;
-  };
-
-  const createNewTask = () => {
-    const title = document.getElementById('new-task-title').value;
-    if (title === '') return alert('You have to specify title');
-    const description = document.getElementById('new-task-description').value;
-    const inputDate = new Date(document.getElementById('new-task-date').value);
-    if (inputDate === '') return alert('You have to specify due date');
-    if (inputDate < new Date(new Date().toDateString())) return alert('Date cannot be in the past');
-    let priority = document.getElementById('new-task-priority').textContent;
-    priority === 'Normal priority' ? priority = false : priority = true;
-    const project = document.getElementById('new-task-project').value;
-    let newTask = taskFactory(title, description, inputDate, false, priority, project);
-    tasksLibrary.push(newTask);
-    taskModule.getOrCreateTaskListDiv().innerHTML = '';
-    tasksLibrary.forEach((task, index) => {
-      taskModule.createTaskDiv(task, index)
-    });
-    document.getElementById('new-task-title').value = '';
-    document.getElementById('new-task-description').value = '';
-    document.getElementById('new-task-project').value = '';
-    hideFullTaskForm();
   };
 
   const createProjectEmptyOption = () => {
@@ -129,7 +115,7 @@ const contentModule = (() => {
     document.querySelectorAll('#div-new-task .for-hide').forEach((item) => item.classList.add('hidden'));
   };
 
-  return { getInitial };
+  return { getInitial, hideFullTaskForm, showFullTaskForm };
 })();
 
 export default contentModule;

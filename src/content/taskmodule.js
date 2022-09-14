@@ -1,7 +1,8 @@
 import taskUncompleteIcon from '/src/icons/task_uncomplete.svg';
 import taskCompleteIcon from '/src/icons/task_complete.svg';
-import { tasksLibrary } from './taskfactory';
 import binIcon from '/src/icons/bin.svg';
+import { LOCAL_STORAGE_TASK_KEY, tasksLibrary, taskFactory } from './taskfactory';
+import contentModule from './contentmodule';
 
 const taskModule = (() => {
   const contentDiv = document.getElementById('content');
@@ -32,6 +33,31 @@ const taskModule = (() => {
     };
     return div;
   };
+
+  const createNewTask = () => {
+    const title = document.getElementById('new-task-title').value;
+    if (title === '') return alert('You have to specify title');
+    const description = document.getElementById('new-task-description').value;
+    const inputDate = new Date(document.getElementById('new-task-date').value);
+    if (inputDate === '') return alert('You have to specify due date');
+    if (inputDate < new Date(new Date().toDateString())) return alert('Date cannot be in the past');
+    let priority = document.getElementById('new-task-priority').textContent;
+    priority === 'Normal priority' ? priority = false : priority = true;
+    const project = document.getElementById('new-task-project').value;
+    let newTask = taskFactory(title, description, inputDate, false, priority, project);
+    tasksLibrary.push(newTask);
+    console.log(tasksLibrary);
+    localStorage.setItem(LOCAL_STORAGE_TASK_KEY, JSON.stringify(tasksLibrary));
+    taskModule.getOrCreateTaskListDiv().innerHTML = '';
+    tasksLibrary.forEach((task, index) => {
+      taskModule.createTaskDiv(task, index)
+    });
+    document.getElementById('new-task-title').value = '';
+    document.getElementById('new-task-description').value = '';
+    document.getElementById('new-task-project').value = '';
+    contentModule.hideFullTaskForm();
+  };
+
 
   const createTaskDiv = (task, index) => {
     const mainDiv = document.createElement('div');
@@ -80,11 +106,12 @@ const taskModule = (() => {
       className: 'task task-content-time',
     });
     const timeP = document.createElement('p');
-    let day = task.dueDate.getDate();
+    const taskDate = new Date(task.dueDate);
+    let day = taskDate.getDate();
     if (day < 10) day = '0' + day;
-    let month = task.dueDate.getMonth() + 1;
+    let month = taskDate.getMonth() + 1;
     if (month < 10) month = '0' + month;
-    const year = task.dueDate.getFullYear();
+    const year = taskDate.getFullYear();
     let taskDateString;
     if (year > new Date(new Date().getFullYear())) {
       taskDateString = `${day}/${month}/${year}`;
@@ -114,18 +141,18 @@ const taskModule = (() => {
     let status = tasksLibrary[index].finished;
     status === true ? status = false : status = true;
     tasksLibrary[index].finished = status;
-    console.log(tasksLibrary);
+    localStorage.setItem(LOCAL_STORAGE_TASK_KEY, JSON.stringify(tasksLibrary));
     getInitial();
     return tasksLibrary[index];
   };
 
   const deleteTask = (index) => {
     tasksLibrary.splice(index, 1);
-    console.log(tasksLibrary);
+    localStorage.setItem(LOCAL_STORAGE_TASK_KEY, JSON.stringify(tasksLibrary));
     getInitial();
   }
 
-  return { getOrCreateTaskListDiv, createTaskDiv, getInitial, showFiltered };
+  return { getOrCreateTaskListDiv, createNewTask, createTaskDiv, getInitial, showFiltered };
 })();
 
 export default taskModule;
