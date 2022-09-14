@@ -148,10 +148,6 @@ a.nav:visited {
   width: 50px;
 }
 
-#sidebar.hidden span {
-  display: none;
-}
-
 #sidebar.hidden ul {
   margin: 16px 0;
 }
@@ -160,11 +156,11 @@ a.nav:visited {
   margin: 0 0 0 10px;
 }
 
-#sidebar.hidden h3 {
-  display: none;
-}
-
-#sidebar.hidden img.sidebar-plusproject-icon {
+#sidebar.hidden img.sidebar-plusproject-icon,
+#sidebar.hidden img.sidebar-delete-project,
+#sidebar.hidden h3,
+#sidebar.hidden span,
+#sidebar.hidden input {
   display: none;
 }
 
@@ -201,7 +197,7 @@ li.sidebar-item {
   padding: 15px 10px;
   margin: 1px 5px 1px 0;
   display: grid;
-  grid-template-columns: min-content auto;
+  grid-template-columns: min-content 1fr min-content;
   align-items: center;
   gap: 5px;
 }
@@ -212,6 +208,12 @@ img.sidebar-plusproject-icon:hover {
   cursor: pointer;
   background-color: var(--color-input);
   background-clip: padding-box;
+  border-radius: 5px;
+}
+
+img.sidebar-delete-project:hover {
+  cursor: pointer;
+  background-color: var(--color-sidebar);
   border-radius: 5px;
 }
 

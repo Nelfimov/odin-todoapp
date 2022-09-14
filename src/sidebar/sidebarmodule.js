@@ -1,5 +1,6 @@
 import expandIcon from '/src/icons/expand_more.svg';
 import plusIcon from '/src/icons/plus.svg';
+import minusIcon from '/src/icons/minus.svg';
 import incomeIcon from '/src/icons/inbox.svg';
 import todayIcon from '/src/icons/calendar_today.svg';
 import aheadIcon from '/src/icons/calendar_month.svg';
@@ -19,10 +20,10 @@ const sidebarModule = (() => {
       ['Ahead', aheadIcon, false, ''],
     ];
     mainInitialRows.forEach((item) => createItem(...item));
-    projectsLibrary.forEach((project) => createItem(project.name, projectIcon, project.isProject, ''));
+    projectsLibrary.forEach((project, index) => createItem(project.name, projectIcon, project.isProject, '', index));
   };
 
-  const createItem = (text, icon, isProject, addClass) => {
+  const createItem = (text, icon, isProject, addClass, projectIndex) => {
     const li = document.createElement('li');
     Object.assign(li, {
       className: 'sidebar sidebar-item ' + addClass,
@@ -82,8 +83,18 @@ const sidebarModule = (() => {
     } else {
       li.id = `${text.toLowerCase()}`;
       destinationUl = document.querySelector('#sidebar-main>ul');
-    }
+    };
     li.append(image, span);
+    if (isProject) {
+      const deleteImage = new Image();
+      Object.assign(deleteImage, {
+        className: 'sidebar sidebar-icon sidebar-delete-project',
+        src: minusIcon,
+      });
+      deleteImage.setAttribute('data-project', projectIndex);
+      deleteImage.addEventListener('click', () => deleteProject(projectIndex));
+      li.append(deleteImage);
+    };
     if (destinationUl == undefined) destinationUl = createList(isProject);
     destinationUl.appendChild(li);
   };
@@ -120,6 +131,7 @@ const sidebarModule = (() => {
         id: 'new-project-input',
         className: 'nav-search hidden',
         type: 'text',
+        placeholder: 'Project name',
       });
       newProjectInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
@@ -170,9 +182,17 @@ const sidebarModule = (() => {
     let newProject = projectFactory(value);
     projectsLibrary.push(newProject);
     localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY, JSON.stringify(projectsLibrary));
-    document.querySelector('#sidebar-project>ul').innerHTML = '';
-    projectsLibrary.forEach((project) => createItem(project.name, projectIcon, project.isProject, ''));
+    const ul = document.querySelector('#sidebar-project>ul');
+    if (ul !== null) ul.innerHTML = '';
+    projectsLibrary.forEach((project, index) => createItem(project.name, projectIcon, project.isProject, '', index));
     return newProject;
+  };
+
+  const deleteProject = (index) => {
+    projectsLibrary.splice(index, 1);
+    localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY, JSON.stringify(projectsLibrary));
+    document.querySelector('#sidebar-project>ul').innerHTML = '';
+    projectsLibrary.forEach((project, projectIndex) => createItem(project.name, projectIcon, project.isProject, '', projectIndex));
   };
 
   return { getInitial, createItem };
