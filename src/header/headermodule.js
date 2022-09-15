@@ -38,8 +38,8 @@ const headerModule = (() => {
       type: '', text: 'Github', destination: rightDiv,
     };
     const initialHeader = [
-      menuImgLeft, searchInputLeft, anchorMid, spanAppNameMid, anchorRight,
-      githubImgRight, spanGithub,
+      menuImgLeft, searchInputLeft, anchorMid, spanAppNameMid,
+      anchorRight, githubImgRight, spanGithub,
     ];
     initialHeader.forEach((item) => createHeaderItem(item));
   }
@@ -54,9 +54,9 @@ const headerModule = (() => {
       })
     };
     if (item.id === 'search') {
-      element.addEventListener('input', (e) => {
+      element.addEventListener('input', () => {
         searchTask();
-      })
+      });
     };
     if (item.tag === 'img') {
       element.src = item.src;
@@ -90,12 +90,8 @@ const headerModule = (() => {
   const searchTask = () => {
     const value = document.getElementById('search').value;
     const regex = new RegExp(value, 'gi');
-    const filterTitle = tasksLibrary.filter((task) => {
-      return regex.test(task.title);
-    });
-    const filterDescription = tasksLibrary.filter((task) => {
-      return regex.test(task.description);
-    });
+    const filterTitle = tasksLibrary.filter((task) => regex.test(task.title));
+    const filterDescription = tasksLibrary.filter((task) => regex.test(task.description));
     if (value !== '') {
       const filteredLibrary = filterTitle.concat(filterDescription);
       taskModule.showFiltered(filteredLibrary);

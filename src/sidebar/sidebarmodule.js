@@ -196,7 +196,7 @@ const sidebarModule = (() => {
     });
   };
 
-  return { getInitial, createItem: DOMcreateItem };
+  return { getInitial };
 })();
 
 export default sidebarModule;

@@ -1,5 +1,4 @@
 import { projectsLibrary } from "../sidebar/projectfactory";
-import { tasksLibrary } from "./taskfactory";
 import taskModule from "./taskmodule";
 
 const contentModule = (() => {
@@ -109,16 +108,16 @@ const contentModule = (() => {
   };
 
   const DOMshowFullTaskForm = () => {
-    document.querySelectorAll('#div-new-task .hidden').forEach((node) => {
-      node.classList.remove('hidden');
-    })
+    document.querySelectorAll('#div-new-task .hidden')
+      .forEach((node) => node.classList.remove('hidden'));
   };
 
   const DOMhideFullTaskForm = () => {
-    document.querySelectorAll('#div-new-task .for-hide').forEach((item) => item.classList.add('hidden'));
+    document.querySelectorAll('#div-new-task .for-hide')
+      .forEach((item) => item.classList.add('hidden'));
   };
 
-  return { getInitial, hideFullTaskForm: DOMhideFullTaskForm, showFullTaskForm: DOMshowFullTaskForm, DOMcreateProjectOption, DOMcreateProjectEmptyOption };
+  return { getInitial, DOMhideFullTaskForm, DOMshowFullTaskForm, DOMcreateProjectOption, DOMcreateProjectEmptyOption };
 })();
 
 export default contentModule;

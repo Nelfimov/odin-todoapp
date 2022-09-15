@@ -59,7 +59,7 @@ const taskModule = (() => {
     document.getElementById('new-task-title').value = '';
     document.getElementById('new-task-description').value = '';
     document.getElementById('new-task-project').value = '';
-    contentModule.hideFullTaskForm();
+    contentModule.DOMhideFullTaskForm();
   };
 
 
